@@ -1,0 +1,7 @@
+name: HuntParty
+version: '${project.version}'
+main: fr.edencraft.huntparty.HuntParty
+api-version: 1.17
+authors: [AlbusTheRabbit]
+softdepend: [SmartInvs]
+load: STARTUP
