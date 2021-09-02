@@ -12,6 +12,7 @@ public class MessageFR {
     public static String huntNameAlreadyExist = prefix + ChatColor.RED + "Ce nom est déjà utilisé";
     public static String huntDoesntExist = prefix + ChatColor.RED + "Ce nom n'existe pas";
     public static String huntIDDoesntExist = prefix + ChatColor.RED + "Cet id n'existe pas";
+    public static String senderAlreadyInHunt = prefix + ChatColor.RED + "Vous êtes déjà dans une hunt";
 
     // Success messages
     public static String huntCreated = prefix + ChatColor.YELLOW + "{Hunt}" + ChatColor.WHITE + " a été crée avec succès";

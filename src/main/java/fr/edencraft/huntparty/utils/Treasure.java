@@ -8,5 +8,4 @@ public class Treasure {
 
     private List<String> commands;
     private Location location;
-    private
 }

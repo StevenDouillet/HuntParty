@@ -20,20 +20,19 @@ public class PlayerCommands extends BaseCommand {
     @Subcommand("join")
     @Description("Join a hunt")
     @CommandPermission("huntparty.join")
-    public static void playerJoinHunt(Player player, String huntName) {
+    public static void onPlayerJoinHuntCommand(Player player, String huntName) {
         if(HuntUtils.playerInAnyHunt(player, HuntParty.hunts)){
             player.sendMessage(MessageFR.senderAlreadyInHunt);
             return;
         };
 
         Hunt hunt = HuntUtils.findHuntByName(huntName, HuntParty.hunts).get(0);
-
     }
 
     @Subcommand("leave")
     @Description("Leave a hunt")
     @CommandPermission("huntparty.leave")
-    public static void onLeaveHunt(Player player, String huntName) {
+    public static void onLeaveHuntCommand(Player player, String huntName) {
         //todo
     }
 }

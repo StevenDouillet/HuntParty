@@ -32,7 +32,7 @@ public class Hunt {
 
     public void buildHunt() {
         FileConfiguration cfg = HuntParty.getConfigurationManager().getConfigurationFile("Hunt.yml");
-        ConfigurationSection huntSection = cfg.getConfigurationSection("hunt." + this.id);
+        ConfigurationSection huntSection = cfg.getConfigurationSection("hunts." + this.id);
         this.name = huntSection.getString("name");
         this.timed = huntSection.getBoolean("timed");
         this.time = huntSection.getInt("time");

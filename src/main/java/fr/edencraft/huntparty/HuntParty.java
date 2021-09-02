@@ -14,8 +14,6 @@ import java.util.logging.Level;
 
 public final class HuntParty extends JavaPlugin {
 
-    private static final String VERSION = HuntParty.class.getPackage().getImplementationVersion();
-
     // MANAGER
     private static ConfigurationManager configurationManager;
 
@@ -44,11 +42,7 @@ public final class HuntParty extends JavaPlugin {
         return configurationManager;
     }
 
-    public static String getVERSION() { return VERSION; }
-
     private void initAllHunt() {
-        FileConfiguration cfg = configurationManager.getConfigurationFile("Hunt.yml");
-        ConfigurationSection huntSection = cfg.getConfigurationSection("hunt");
         ConfigurationUtils.getAllHuntID().forEach(huntID -> {
             Hunt hunt = new Hunt(huntID);
             hunt.buildHunt();

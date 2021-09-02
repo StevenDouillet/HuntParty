@@ -3,6 +3,7 @@ package fr.edencraft.huntparty.configuration;
 import fr.edencraft.huntparty.HuntParty;
 import fr.edencraft.huntparty.lang.MessageFR;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -18,6 +19,11 @@ public class ConfigurationUtils {
         return cfg.getConfigurationSection("hunts." + huntID);
     }
 
+    public static ConfigurationSection getHuntTreasuresConfigurationSection(String huntID) {
+        FileConfiguration cfg = HuntParty.getConfigurationManager().getConfigurationFile("Hunt.yml");
+        return cfg.getConfigurationSection("hunts." + huntID + ".treasures");
+    }
+
     public static List<String> getAllHuntID() {
         FileConfiguration cfg = HuntParty.getConfigurationManager().getConfigurationFile("Hunt.yml");
         ConfigurationSection huntSection = cfg.getConfigurationSection("hunts");
@@ -28,7 +34,7 @@ public class ConfigurationUtils {
         FileConfiguration cfg = HuntParty.getConfigurationManager().getConfigurationFile("Hunt.yml");
         List<String> huntNames = new ArrayList<>();
         getAllHuntID().forEach(huntID -> {
-            ConfigurationSection huntIDSection = cfg.getConfigurationSection("hunt." + huntID);
+            ConfigurationSection huntIDSection = cfg.getConfigurationSection("hunts." + huntID);
             if (huntIDSection.getString("name") != null) {
                 huntNames.add(huntIDSection.getString("name"));
             }
@@ -70,19 +76,14 @@ public class ConfigurationUtils {
 
     public static void setupTreasureHunt(Player player, String huntName) {
         String huntId = getHuntID(huntName);
-        if(huntId == null){
-            player.sendMessage(MessageFR.huntDoesntExist);
-            return;
-        }
-
         Location targetLocation = player.getTargetBlock(null, 100).getLocation();
-        ConfigurationSection huntIDSection = ConfigurationUtils.getHuntConfigurationSection(huntId);
+        ConfigurationSection huntTreasureSection = ConfigurationUtils.getHuntTreasuresConfigurationSection(huntId);
 
-        int id = huntIDSection.getKeys(false).size();
-        while (huntIDSection.contains(String.valueOf(id))) {
+        int id = huntTreasureSection.getKeys(false).size();
+        while (huntTreasureSection.contains(String.valueOf(id))) {
             id++;
         }
-        ConfigurationSection treasureHuntIDSection = huntIDSection.createSection(String.valueOf(id));
+        ConfigurationSection treasureHuntIDSection = huntTreasureSection.createSection(String.valueOf(id));
 
         treasureHuntIDSection.set("x", targetLocation.getX());
         treasureHuntIDSection.set("y", targetLocation.getY());
@@ -95,15 +96,11 @@ public class ConfigurationUtils {
 
     public static void deleteHunt(Player player, String huntName) {
         String huntId = getHuntID(huntName);
-        if(huntId == null){
-            player.sendMessage(MessageFR.huntDoesntExist);
-            return;
-        }
-
         FileConfiguration cfg = HuntParty.getConfigurationManager().getConfigurationFile("Hunt.yml");
         ConfigurationSection huntSection = cfg.getConfigurationSection("hunts");
         huntSection.set(huntId, null);
 
+        HuntParty.getConfigurationManager().saveFile("Hunt.yml");
         player.sendMessage(MessageFR.huntHasBeenDelete.replace("{Hunt}", huntName));
     }
 }
