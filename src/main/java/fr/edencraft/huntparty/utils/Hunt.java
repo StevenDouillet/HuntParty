@@ -103,4 +103,8 @@ public class Hunt {
     public void addHuntPLayer(HuntPlayer huntPlayer) {
         this.huntPlayers.add(huntPlayer);
     }
+
+    public void removeHuntPlayer(HuntPlayer huntPlayer) {
+        this.huntPlayers.remove(huntPlayer);
+    }
 }

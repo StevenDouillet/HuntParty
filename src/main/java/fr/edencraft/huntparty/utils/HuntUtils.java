@@ -18,4 +18,8 @@ public class HuntUtils {
     public static List<Hunt> findHuntByName(String huntName, List<Hunt> hunts) {
         return hunts.stream().filter(hunt -> hunt.getName().equalsIgnoreCase(huntName)).collect(Collectors.toList());
     }
+
+    public static boolean doesHuntExist(String huntName, List<Hunt> hunts) {
+        return hunts.stream().anyMatch(hunt -> hunt.getName().equalsIgnoreCase(huntName));
+    }
 }
