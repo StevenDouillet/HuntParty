@@ -2,8 +2,9 @@ package fr.edencraft.huntparty.configuration;
 
 import fr.edencraft.huntparty.HuntParty;
 import fr.edencraft.huntparty.lang.MessageFR;
+import fr.edencraft.huntparty.utils.Hunt;
+import fr.edencraft.huntparty.utils.HuntState;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConfigurationUtils {
 
@@ -68,10 +70,14 @@ public class ConfigurationUtils {
         huntIDSection.set("name", huntName);
         huntIDSection.set("timed", true);
         huntIDSection.set("time", 3600);
+        huntIDSection.set("state", HuntState.WAITING.name());
         huntIDSection.createSection("treasures");
 
         HuntParty.getConfigurationManager().saveFile("Hunt.yml");
-        player.sendMessage(MessageFR.huntCreated.replace("{Hunt}", huntName));
+
+        Hunt hunt = new Hunt(String.valueOf(id));
+        hunt.buildHunt();
+        HuntParty.hunts.add(hunt);
     }
 
     public static void setupTreasureHunt(Player player, String huntName) {
@@ -101,6 +107,9 @@ public class ConfigurationUtils {
         huntSection.set(huntId, null);
 
         HuntParty.getConfigurationManager().saveFile("Hunt.yml");
-        player.sendMessage(MessageFR.huntHasBeenDelete.replace("{Hunt}", huntName));
+
+        List<Hunt> matchingHunt = HuntParty.hunts.stream().filter(hunt -> hunt.getId().equalsIgnoreCase(huntId))
+                .collect(Collectors.toList());
+        HuntParty.hunts.remove(matchingHunt.get(0));
     }
 }

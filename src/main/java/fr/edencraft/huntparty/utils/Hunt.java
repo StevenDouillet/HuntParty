@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Hunt {
 
@@ -36,6 +37,18 @@ public class Hunt {
         this.name = huntSection.getString("name");
         this.timed = huntSection.getBoolean("timed");
         this.time = huntSection.getInt("time");
+
+        switch (Objects.requireNonNull(huntSection.getString("state"))) {
+            case "WAITING":
+                this.state = HuntState.WAITING;
+                break;
+            case "RUNNING":
+                this.state = HuntState.RUNNING;
+                break;
+            case "ENDING":
+                this.state = HuntState.ENDING;
+                break;
+        }
         this.isBuild = true;
     }
 

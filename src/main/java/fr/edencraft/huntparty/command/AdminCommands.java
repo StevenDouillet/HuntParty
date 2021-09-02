@@ -5,8 +5,10 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
+import fr.edencraft.huntparty.HuntParty;
 import fr.edencraft.huntparty.configuration.ConfigurationUtils;
 import fr.edencraft.huntparty.lang.MessageFR;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -23,6 +25,7 @@ public class AdminCommands extends BaseCommand {
             return;
         };
         ConfigurationUtils.createHunt(player, huntName);
+        player.sendMessage(MessageFR.huntCreated.replace("{Hunt}", huntName));
     }
 
     @Subcommand("setup")
@@ -47,5 +50,24 @@ public class AdminCommands extends BaseCommand {
             return;
         };
         ConfigurationUtils.deleteHunt(player, huntName);
+        player.sendMessage(MessageFR.huntHasBeenDelete.replace("{Hunt}", huntName));
+    }
+
+    @Subcommand("list")
+    @Description("List all hunts")
+    @CommandPermission("huntparty.list")
+    public static void onListHuntCommand(Player player) {
+        if(HuntParty.hunts.size() <= 0) {
+            player.sendMessage(MessageFR.noHuntFound);
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+            return;
+        }
+
+        player.sendMessage(MessageFR.huntListTitle);
+        HuntParty.hunts.forEach(hunt -> {
+            player.sendMessage(ChatColor.DARK_GRAY + " [" +
+                    hunt.getState().getDisplayName() + ChatColor.DARK_GRAY + "] " +
+                    ChatColor.WHITE + hunt.getName());
+        });
     }
 }
