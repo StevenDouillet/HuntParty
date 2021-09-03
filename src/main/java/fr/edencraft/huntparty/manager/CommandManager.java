@@ -34,5 +34,9 @@ public class CommandManager {
                 "huntpartyplayers",
                 context -> CommandCompletionUtils.getAllHuntName()
         );
+        manager.getCommandCompletions().registerAsyncCompletion(
+                "huntpartytreasures",
+                context -> CommandCompletionUtils.getAllHuntName()
+        );
     }
 }

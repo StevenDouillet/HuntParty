@@ -4,11 +4,13 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import fr.edencraft.huntparty.HuntParty;
 import fr.edencraft.huntparty.configuration.ConfigurationUtils;
+import fr.edencraft.huntparty.event.HuntStartedEvent;
 import fr.edencraft.huntparty.lang.MessageFR;
 import fr.edencraft.huntparty.utils.Hunt;
 import fr.edencraft.huntparty.utils.HuntPlayer;
 import fr.edencraft.huntparty.utils.HuntState;
 import fr.edencraft.huntparty.utils.HuntUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -86,6 +88,29 @@ public class AdminCommands extends BaseCommand {
         });
     }
 
+    @Subcommand("treasures")
+    @Description("List all treasures of a hunt")
+    @CommandPermission("huntparty.treasures")
+    @CommandCompletion("@huntpartytreasures")
+    public static void onListTreasureHuntCommand(Player player, String huntName) {
+        if(!HuntUtils.doesHuntExist(huntName, HuntParty.hunts)) {
+            player.sendMessage(MessageFR.huntDoesntExist);
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+            return;
+        }
+
+        Hunt hunt = HuntUtils.findHuntByName(huntName, HuntParty.hunts).get(0);
+
+        player.sendMessage(MessageFR.huntTreasureListTitle.replace("{hunt}", huntName));
+        hunt.getHuntTreasures().forEach(treasure -> {
+            player.sendMessage(MessageFR.huntTreasureInfo
+                    .replace("{x}", String.valueOf(treasure.getLocation().getX()))
+                    .replace("{y}", String.valueOf(treasure.getLocation().getY()))
+                    .replace("{z}", String.valueOf(treasure.getLocation().getZ()))
+                    .replace("{world}", treasure.getLocation().getWorld().getName()));
+        });
+    }
+
     @Subcommand("start")
     @Description("Start a hunt")
     @CommandPermission("huntparty.start")
@@ -104,6 +129,9 @@ public class AdminCommands extends BaseCommand {
                             "Hunt " + huntName + " already started", Sound.ENTITY_VILLAGER_NO);
                     return;
                 }
+
+                HuntStartedEvent event = new HuntStartedEvent(hunt);
+                Bukkit.getPluginManager().callEvent(event);
 
                 hunt.setState(HuntState.RUNNING);
                 sendInformation(sender, huntName, MessageFR.huntHasStarted,

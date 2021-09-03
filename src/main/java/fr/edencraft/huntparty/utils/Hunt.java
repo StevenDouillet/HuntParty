@@ -1,6 +1,9 @@
 package fr.edencraft.huntparty.utils;
 
 import fr.edencraft.huntparty.HuntParty;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -16,7 +19,8 @@ public class Hunt {
     private int time;
     private HuntState state;
     private boolean isBuild;
-    private final List<HuntPlayer> huntPlayers = new ArrayList<>();
+    private List<HuntPlayer> huntPlayers = new ArrayList<>();
+    private List<Treasure> huntTreasures = new ArrayList<>();
 
     public Hunt(String id, String name, boolean timed, int time) {
         this.id = id;
@@ -49,6 +53,17 @@ public class Hunt {
                 this.state = HuntState.ENDING;
                 break;
         }
+        this.time = huntSection.getInt("time");
+
+        ConfigurationSection treasuresSection = huntSection.getConfigurationSection("treasures");
+        treasuresSection.getKeys(false).forEach(treasureID -> {
+            ConfigurationSection treasureSection = treasuresSection.getConfigurationSection(treasureID);
+            double x = treasureSection.getDouble("x");
+            double y = treasureSection.getDouble("y");
+            double z = treasureSection.getDouble("z");
+            World world = Bukkit.getWorld(treasureSection.getString("world"));
+            this.huntTreasures.add(new Treasure(null, new Location(world, x, y, z)));
+        });
         this.isBuild = true;
     }
 
@@ -106,5 +121,9 @@ public class Hunt {
 
     public void removeHuntPlayer(HuntPlayer huntPlayer) {
         this.huntPlayers.remove(huntPlayer);
+    }
+
+    public List<Treasure> getHuntTreasures() {
+        return huntTreasures;
     }
 }

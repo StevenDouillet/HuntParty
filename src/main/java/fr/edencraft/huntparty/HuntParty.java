@@ -3,6 +3,7 @@ package fr.edencraft.huntparty;
 import fr.edencraft.huntparty.configuration.ConfigurationManager;
 import fr.edencraft.huntparty.configuration.ConfigurationUtils;
 import fr.edencraft.huntparty.manager.CommandManager;
+import fr.edencraft.huntparty.manager.ListenerManager;
 import fr.edencraft.huntparty.utils.Hunt;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,6 +25,7 @@ public final class HuntParty extends JavaPlugin {
         long delay = System.currentTimeMillis();
         configurationManager = new ConfigurationManager(this);
         configurationManager.setupFiles();
+        new ListenerManager(this);
         new CommandManager(this);
         getLogger().log(Level.INFO, "Initialization of all Hunt ...");
         initAllHunt();

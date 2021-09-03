@@ -13,6 +13,9 @@ public class MessageFR {
     public static String huntListTitle = prefix + ChatColor.WHITE + "Liste des chasses :";
     public static String huntPlayerListTitle = prefix + ChatColor.WHITE + "Liste des joueurs dans la chasse "
             + ChatColor.YELLOW + "{hunt} " + ChatColor.WHITE + ":";
+    public static String huntTreasureListTitle = prefix + ChatColor.WHITE + "Liste des trésors dans la chasse "
+            + ChatColor.YELLOW + "{hunt} " + ChatColor.WHITE + ":";
+    public static String huntTreasureInfo = "x: {x}, y: {y}, z: {z}, world: {world}";
 
     // Error messages
     public static String huntNameAlreadyExist = prefix + ChatColor.RED + "Ce nom est déjà utilisé";

@@ -25,6 +25,10 @@ public class TreasureDiscoveredEvent extends Event implements Cancellable {
         return handlerList;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlerList;
+    }
+
     @Override
     public boolean isCancelled() {
         return isCancelled;
