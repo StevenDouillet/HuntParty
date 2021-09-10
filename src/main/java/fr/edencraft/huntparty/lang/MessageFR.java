@@ -32,4 +32,7 @@ public class MessageFR {
     public static String treasureHuntSet = prefix + ChatColor.YELLOW + "Point sauvegardé pour {Hunt}";
     public static String huntHasStarted = prefix + ChatColor.YELLOW + "La chasse a démarré !";
     public static String playerHasJoinHunt = prefix + ChatColor.YELLOW + "Tu as rejoins la chasse {hunt}";
+
+    // Gui
+    public static String huntListTitleInventoryGui = ChatColor.DARK_GRAY + "Liste des hunts";
 }

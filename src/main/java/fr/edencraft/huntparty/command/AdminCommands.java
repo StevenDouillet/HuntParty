@@ -5,6 +5,7 @@ import co.aikar.commands.annotation.*;
 import fr.edencraft.huntparty.HuntParty;
 import fr.edencraft.huntparty.configuration.ConfigurationUtils;
 import fr.edencraft.huntparty.event.HuntStartedEvent;
+import fr.edencraft.huntparty.inventory.HuntListProvider;
 import fr.edencraft.huntparty.lang.MessageFR;
 import fr.edencraft.huntparty.utils.Hunt;
 import fr.edencraft.huntparty.utils.HuntPlayer;
@@ -79,13 +80,7 @@ public class AdminCommands extends BaseCommand {
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
             return;
         }
-
-        player.sendMessage(MessageFR.huntListTitle);
-        HuntParty.hunts.forEach(hunt -> {
-            player.sendMessage(ChatColor.DARK_GRAY + " [" +
-                    hunt.getState().getDisplayName() + ChatColor.DARK_GRAY + "] " +
-                    ChatColor.WHITE + hunt.getName());
-        });
+        HuntListProvider.getInventory(player).open(player);
     }
 
     @Subcommand("treasures")

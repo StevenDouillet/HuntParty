@@ -5,6 +5,7 @@ import fr.edencraft.huntparty.configuration.ConfigurationUtils;
 import fr.edencraft.huntparty.manager.CommandManager;
 import fr.edencraft.huntparty.manager.ListenerManager;
 import fr.edencraft.huntparty.utils.Hunt;
+import fr.minuskube.inv.InventoryManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +18,7 @@ public final class HuntParty extends JavaPlugin {
 
     // MANAGER
     private static ConfigurationManager configurationManager;
+    private static InventoryManager inventoryManager;
 
     public static List<Hunt> hunts = new ArrayList<>();
 
@@ -25,6 +27,8 @@ public final class HuntParty extends JavaPlugin {
         long delay = System.currentTimeMillis();
         configurationManager = new ConfigurationManager(this);
         configurationManager.setupFiles();
+        inventoryManager = new InventoryManager(this);
+        inventoryManager.init();
         new ListenerManager(this);
         new CommandManager(this);
         getLogger().log(Level.INFO, "Initialization of all Hunt ...");
@@ -38,6 +42,10 @@ public final class HuntParty extends JavaPlugin {
     public void onDisable() {
         // todo : remove player datas
         configurationManager.saveFiles();
+    }
+
+    public static InventoryManager getInventoryManager() {
+        return inventoryManager;
     }
 
     public static ConfigurationManager getConfigurationManager() {
