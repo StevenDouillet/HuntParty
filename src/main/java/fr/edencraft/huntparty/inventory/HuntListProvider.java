@@ -24,9 +24,8 @@ import java.util.UUID;
 
 public class HuntListProvider implements InventoryProvider {
 
-    private Player player;
-    private List<Hunt> hunts;
-    private ClickableItem[] items;
+    private final Player player;
+    private final List<Hunt> hunts;
 
     public HuntListProvider(Player player, List<Hunt> hunts) {
         this.player = player;
@@ -44,8 +43,6 @@ public class HuntListProvider implements InventoryProvider {
 
     @Override
     public void init(Player player, InventoryContents contents) {
-        this.items = new ClickableItem[hunts.size()];
-
         Pagination pagination = contents.pagination();
         contents.fillBorders(ClickableItem.empty(new ItemStack(Material.GRAY_STAINED_GLASS_PANE)));
 
@@ -61,12 +58,7 @@ public class HuntListProvider implements InventoryProvider {
                         Material.ARROW, 1, ChatColor.YELLOW + "● Page suivante ●"),
                 e -> HuntListProvider.getInventory(player).open(player, pagination.next().getPage())));
 
-        updateItems();
-        System.out.println("JE SUIS LA ");
-        System.out.println(items[2].getItem().getItemMeta().getDisplayName());
-        System.out.println(items[3].getItem().getItemMeta().getDisplayName());
-
-        contents.pagination().setItems(items);
+        contents.pagination().setItems(buildClickableItems());
         contents.pagination().setItemsPerPage(21);
         contents.pagination().addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 1)
                 .blacklist(0, 1)
@@ -100,7 +92,9 @@ public class HuntListProvider implements InventoryProvider {
     @Override
     public void update(Player player, InventoryContents contents) {}
 
-    private void updateItems() {
+    private ClickableItem[] buildClickableItems() {
+        ClickableItem[] items = new ClickableItem[hunts.size()];
+
         String skullBase64 = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOThiN2NhM2M3ZDMxNGE2MWFiZWQ4ZmMxOGQ3OTdmYzMwYjZlZmM4NDQ1NDI1YzRlMjUwOTk3ZTUyZTZjYiJ9fX0=";
         ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
@@ -110,7 +104,7 @@ public class HuntListProvider implements InventoryProvider {
         skullMeta.setPlayerProfile(playerProfile);
         head.setItemMeta(skullMeta);
 
-        for(int i = 0; i < items.length; i++) {
+        for(int i = 0; i < hunts.size(); i++) {
             Hunt hunt = hunts.get(i);
             ArrayList<String> lores = new ArrayList<String>() {{
                 add("  " + ChatColor.GRAY + "ID : " + ChatColor.DARK_GRAY + hunt.getId());
@@ -122,14 +116,12 @@ public class HuntListProvider implements InventoryProvider {
                 add("  " + ChatColor.GRAY + "Players : " + ChatColor.DARK_GRAY + hunt.getHuntPlayers().size());
                 add("  " + ChatColor.GRAY + "Treasures : " + ChatColor.DARK_GRAY + hunt.getHuntTreasures().size());
             }};
-            System.out.println("i: " + i);
-            System.out.println("hunt: " + hunt.getName());
-            this.items[i] = ClickableItem.of(InventoryUtils.createItemStack(head, 1,ChatColor.GRAY + hunt.getName(), lores), e -> {
+
+            items[i] = ClickableItem.of(InventoryUtils.createItemStack(head, 1,ChatColor.GRAY + "BONJOUR TA MERE " + i, lores), e -> {
                 HuntListProvider.getInventory(player).close(player);
             });
-            System.out.println("name: " + items[i].getItem().getItemMeta().getDisplayName());
         }
-        System.out.println(items[2].getItem().getItemMeta().getDisplayName());
-        System.out.println(items[3].getItem().getItemMeta().getDisplayName());
+
+        return items;
     }
 }

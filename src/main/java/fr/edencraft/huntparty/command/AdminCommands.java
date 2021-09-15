@@ -12,7 +12,6 @@ import fr.edencraft.huntparty.utils.HuntPlayer;
 import fr.edencraft.huntparty.utils.HuntState;
 import fr.edencraft.huntparty.utils.HuntUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
